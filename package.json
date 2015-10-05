@@ -1,0 +1,28 @@
+{
+  "name": "myo-control",
+  "version": "1.0.0",
+  "description": "Playing around with the Myo armband and mapping EMG data to controls",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buuav/myo-control.git"
+  },
+  "keywords": [
+    "node",
+    "myo"
+  ],
+  "author": "ghirlekar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buuav/myo-control/issues"
+  },
+  "homepage": "https://github.com/buuav/myo-control#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "myo": "^2.1.0",
+    "socket.io": "^1.3.7"
+  }
+}

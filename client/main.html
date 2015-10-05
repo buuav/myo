@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Myo Armband EMG Grapher</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"></script>
+    <style type="text/css">
+    .graph {
+        display: inline-block;
+        width: 300px;
+        height: 200px;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="graph" id="ch1"></div>
+        <div class="graph" id="ch2"></div>
+        <div class="graph" id="ch3"></div>
+        <div class="graph" id="ch4"></div>
+    </div>
+    <div>
+        <div class="graph" id="ch5"></div>
+        <div class="graph" id="ch6"></div>
+        <div class="graph" id="ch7"></div>
+        <div class="graph" id="ch8"></div>
+    </div>
+    <script type="text/javascript">
+    socket = io();
+    var emgData = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ];
+    var graphs = [];
+
+    for (var i = 0; i < 8; i++) {
+        graphs.push(new Dygraph(document.getElementById('ch' + (i + 1)), [], {
+            rollPeriod: 1,
+            labels: ['time', 'ch' + (i + 1)],
+            valueRange: [-128, 128]
+        }));
+    }
+
+    socket.on('emg', function(data) {
+        for (var i = 0; i < 8; i++) {
+            emgData[i].push([new Date(), data[i]]);
+            if (emgData[i].length > 1000) emgData[i] = emgData[i].slice(1);
+        }
+    });
+
+    window.setInterval(function() {
+        for (var i = 0; i < 8; i++) {
+            graphs[i].updateOptions({
+                'file': emgData[i]
+            });
+        }
+    }, 33);
+    </script>
+</body>
+
+</html>
