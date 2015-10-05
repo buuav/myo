@@ -31,29 +31,43 @@
     <script type="text/javascript">
     socket = io();
     var emgData = [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
-    ];
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        buffer = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ];
     var graphs = [];
 
     for (var i = 0; i < 8; i++) {
         graphs.push(new Dygraph(document.getElementById('ch' + (i + 1)), [], {
             rollPeriod: 1,
             labels: ['time', 'ch' + (i + 1)],
-            valueRange: [-128, 128]
+            valueRange: [0, 128]
         }));
     }
 
     socket.on('emg', function(data) {
         for (var i = 0; i < 8; i++) {
-            emgData[i].push([new Date(), data[i]]);
-            if (emgData[i].length > 1000) emgData[i] = emgData[i].slice(1);
+            buffer[i].push(data[i]);
+            if (buffer[i].length > 10) buffer[i] = buffer[i].slice(1);
+            var lastVal = emgData[i].slice(-1)[1];
+            var smoothedVal = lastVal ? 0.3 * Math.max.apply(null, buffer[i]) + 0.7 * lastVal : Math.max.apply(null, buffer[i]);
+            emgData[i].push([new Date(), smoothedVal]);
+            if (emgData[i].length > 500) emgData[i] = emgData[i].slice(1);
         }
     });
 
@@ -64,6 +78,10 @@
             });
         }
     }, 33);
+
+    function ema() {
+
+    }
     </script>
 </body>
 
