@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/buuav/myo-control#readme",
   "dependencies": {
-    "myo": "^2.1.0",
+    "myo": "^2.1.0"
   }
 }
